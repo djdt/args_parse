@@ -53,7 +53,7 @@ namespace argsparse {
 				for (auto c_it = arg.begin() + 1; c_it != arg.end(); ++c_it) {
 
 					const std::map<std::string, Option>::iterator key = std::find_if(
-							_options.begin(), _options.end(), [c_it]
+							_options.begin(), _options.end(), [&c_it]
 							(std::pair<std::string, Option>& opt)
 							{	return (opt.second.short_opt == *c_it); });
 					if (key == _options.end()) {
