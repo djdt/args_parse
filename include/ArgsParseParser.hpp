@@ -38,6 +38,10 @@ namespace argsparse
 					_options.insert({long_opt, Option(long_opt, short_opt,
 								desc, default_val, argsparse::value::size(default_val))});
 				}
+			template<typename T>
+				const T& option(const std::string& name) {
+					return this->operator[](name).as<T>();
+				}
 
 			void addPositional(const std::string& name);
 			const std::string& positional(const std::string& name);

@@ -99,10 +99,11 @@ namespace argsparse {
 		}
 
 		if (pos_it != _positional.end()) {
-			std::cerr << "Parser::Parse: Missing positional arguments: " << std::endl;
-			while (pos_it != _positional.end()) {
-				std::cerr << (*pos_it).first;
-				++pos_it;
+			std::cerr << "Parser::parse() Missing positional arguments: " << std::endl;
+			for (auto p : _positional) {
+				if (p.second != "") {
+					std::cerr << p.first << " ";
+				}
 			}
 			std::cerr << std::endl;
 			return false;
