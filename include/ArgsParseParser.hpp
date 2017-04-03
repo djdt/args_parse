@@ -1,0 +1,54 @@
+#ifndef _ARGS_PARSE_PARSER_H_
+#define _ARGS_PARSE_PARSER_H_
+
+#include <map>
+#include <string>
+#include <vector>
+
+#include "ArgsParseOption.hpp"
+
+namespace argsparse
+{
+
+	class Parser
+	{
+		private:
+			std::string _name;
+			std::map<std::string, Option> _options;
+			std::vector<std::pair<const std::string, std::string>> _positional;
+
+		public:
+			Parser(const std::string name = "") : _name(name) {}
+
+			void addOption(const std::string& long_opt, const char short_opt = 0,
+					const std::string& desc = "")
+			{
+				if (_options.find(long_opt) != _options.end()) throw(
+						argsparse::exception("Parser::AddOption: option already exists."));
+				_options.insert({long_opt, Option(long_opt, short_opt,
+							desc, false, 0)});
+			}
+
+			template <typename T>
+				void addOption(const std::string& long_opt, const char short_opt = 0,
+						const std::string& desc = "", const T& default_val = 0)
+				{
+					if (_options.find(long_opt) != _options.end()) throw(
+							argsparse::exception("Parser::AddOption: option already exists."));
+					_options.insert({long_opt, Option(long_opt, short_opt,
+								desc, default_val, argsparse::value::size(default_val))});
+				}
+
+			void addPositional(const std::string& name);
+
+			bool parse(const std::vector<std::string>& args);
+			bool parse(int32_t argc, const char* argv[]);
+
+			const Option& operator[](const std::string& long_opt);
+			const Option& operator[](const char _short_opt);
+
+			friend std::ostream& operator<<(std::ostream& os, const Parser& p);
+	};
+};
+
+#endif /* ifndef _ARGS_PARSE_PARSER_H_ */
