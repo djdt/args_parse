@@ -64,9 +64,9 @@ namespace argsparse {
 						<< key->second.nargs << " arguments." << std::endl;
 					return false;
 				}
-				if (parseOption(key->second, {it + 1, it + 1 + key->second.nargs}))
+				if (parseOption(key->second, {it + 1, it + key->second.nargs}))
 					return false;
-				it = it + 1 + key->second.nargs;
+				it = it + key->second.nargs;
 
 			} else if (arg.front() == '-') { // Parse as shorts
 
@@ -86,7 +86,7 @@ namespace argsparse {
 						}
 						key->second.count++;
 					} else {
-						if (parseOption(key->second, {it + 1, it + 1 + key->second.nargs}))
+						if (parseOption(key->second, {it + 1, it + key->second.nargs}))
 							return false;
 						it = it + 1 + key->second.nargs;
 					}
@@ -147,7 +147,7 @@ namespace argsparse {
 		for (auto opt : p._options) {
 			os << "\t\t" << opt.second << "\n";
 		}
-		return os << std::endl;
+		return os;
 	}
 
 } /* namespace argsparse */
