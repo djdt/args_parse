@@ -40,6 +40,7 @@ namespace argsparse
 				}
 
 			void addPositional(const std::string& name);
+			const std::string& positional(const std::string& name);
 
 			bool parse(const std::vector<std::string>& args);
 			bool parse(int32_t argc, const char* argv[]);

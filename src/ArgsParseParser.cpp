@@ -24,6 +24,16 @@ namespace argsparse {
 		_positional.push_back({name, ""});
 	}
 
+	const std::string& Parser::positional(const std::string& name)
+	{
+		auto it = std::find_if(_positional.begin(), _positional.end(),
+				[&name] (auto positional) { return positional.first == name; });
+		if (it == _positional.end()) throw(argsparse::exception(
+					"Parser::positional(): " + name + " not found."));
+
+		return it->second;
+	}
+
 	bool Parser::parse(const std::vector<std::string>& args)
 	{
 		if (_name == "") _name = args.front();
