@@ -7,7 +7,10 @@ namespace argsparse {
 	bool parseOption(Option& opt, std::vector<std::string>::const_iterator& arg_it, std::vector<std::string>::const_iterator end)
 	{
 		// Increment even if requires no args
-		if (opt.nargs == 0) opt.nargs++;
+		if (opt.nargs == 0) {
+			opt.nargs++;
+			return true;
+		}
 
 		int32_t i = 0;
 		while (i < opt.nargs) {
@@ -49,13 +52,12 @@ namespace argsparse {
 
 				for (auto c_it = arg.begin() + 1; c_it != arg.end(); ++c_it) {
 
-					/* const std::map<std::string, Option>::iterator key = std::find_if( */
-					/* 		_options.begin(), _options.end(), [c_it] */
-					/* 		(std::pair<std::string, Option>& opt) */
-					/* 		{	return (opt.second.short_opt == *c_it); }); */
-					auto key = _options.end();
+					const std::map<std::string, Option>::iterator key = std::find_if(
+							_options.begin(), _options.end(), [c_it]
+							(std::pair<std::string, Option>& opt)
+							{	return (opt.second.short_opt == *c_it); });
 					if (key == _options.end()) {
-						std::cerr << "Parser::Parse: -" << *c_it << "not found." << std::endl;
+						std::cerr << "Parser::Parse: -" << *c_it << " not found." << std::endl;
 						return false;
 					}
 					if (key->second.nargs && c_it != arg.end() - 1) {
