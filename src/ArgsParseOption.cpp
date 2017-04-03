@@ -6,6 +6,7 @@ namespace argsparse {
 
 	std::ostream& operator<<(std::ostream& os, const Option& opt)
 	{
+		size_t init_w = os.width();
 		if (opt.short_opt != 0) {
 			os << "-" << opt.short_opt << ",";
 		}
@@ -14,10 +15,9 @@ namespace argsparse {
 			std::string upper(opt.long_opt);
 			std::transform(upper.begin(), upper.end(), upper.begin(),
 					[] (char c) { return std::toupper(c); });
-			os << upper;
+			opt.nargs > 1 ? os << upper << "..." : os << upper;
 		}
-		opt.nargs > 1 ? os << "... " : os << " ";
-		return os << std::setw(30) << std::left << opt.desc;
+		return os << std::setw(30 - (os.width() - init_w)) << opt.desc;
 	}
 
 } /* namespace argsparse */
