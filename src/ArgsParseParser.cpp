@@ -17,27 +17,27 @@ namespace argsparse {
 		}
 		return true;
 	}
-	bool parseOption(Option& opt, std::vector<std::string>::const_iterator& arg_it, std::vector<std::string>::const_iterator end)
-	{
-		// Increment even if requires no args
-		if (opt.nargs == 0) {
-			opt.nargs++;
-			return true;
-		}
+	/* bool parseOption(Option& opt, std::vector<std::string>::const_iterator& arg_it, std::vector<std::string>::const_iterator end) */
+	/* { */
+	/* 	// Increment even if requires no args */
+	/* 	if (opt.nargs == 0) { */
+	/* 		opt.nargs++; */
+	/* 		return true; */
+	/* 	} */
 
-		int32_t i = 0;
-		while (i < opt.nargs) {
-			if (arg_it == end || (*arg_it).front() == '-') {
-				std::cerr << "Parser::ParseAsLong: " << opt.long_opt
-					<< " requires " << opt.nargs << " arguments."
-					<< std::endl;
-				return false;
-			}
-			opt.parse(*(arg_it++));
-			++i;
-		}
-		return true;
-	}
+	/* 	int32_t i = 0; */
+	/* 	while (i < opt.nargs) { */
+	/* 		if (arg_it == end || (*arg_it).front() == '-') { */
+	/* 			std::cerr << "Parser::ParseAsLong: " << opt.long_opt */
+	/* 				<< " requires " << opt.nargs << " arguments." */
+	/* 				<< std::endl; */
+	/* 			return false; */
+	/* 		} */
+	/* 		opt.parse(*(arg_it++)); */
+	/* 		++i; */
+	/* 	} */
+	/* 	return true; */
+	/* } */
 
 	void Parser::addPositional(const std::string& name)
 	{
@@ -59,7 +59,7 @@ namespace argsparse {
 					std::cerr << "Parser::parse() " << arg << " not found." << std::endl;
 					return false;
 				}
-				if (it + 1 + key->second.nargs >= args.end()) {
+				if (it + key->second.nargs >= args.end()) {
 					std::cerr << "Parser:parse() " << arg << " requires "
 						<< key->second.nargs << " arguments." << std::endl;
 					return false;
