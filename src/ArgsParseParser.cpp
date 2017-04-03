@@ -4,6 +4,19 @@
 
 namespace argsparse {
 
+	bool parseOption(Option& opt, const std::vector<std::string>& args)
+	{
+		auto it = args.cbegin();
+		while(opt.count++ < opt.nargs) {
+			if ((*it).front() == '-') {
+				std::cerr << "Parser:parse() " << opt.long_opt << " requires "
+					<< opt.nargs << " arguments." << std::endl;
+				return false;
+			}
+			opt.parse(*it++);
+		}
+		return true;
+	}
 	bool parseOption(Option& opt, std::vector<std::string>::const_iterator& arg_it, std::vector<std::string>::const_iterator end)
 	{
 		// Increment even if requires no args
@@ -43,10 +56,17 @@ namespace argsparse {
 
 				auto key = _options.find(arg.substr(2));
 				if (key == _options.end()) {
-					std::cerr << "Parser::Parse: " << arg << "not found." << std::endl;
+					std::cerr << "Parser::parse() " << arg << " not found." << std::endl;
 					return false;
 				}
-				if (!parseOption(key->second, ++it, args.end())) return false;
+				if (it + 1 + key->second.nargs >= args.end()) {
+					std::cerr << "Parser:parse() " << arg << " requires "
+						<< key->second.nargs << " arguments." << std::endl;
+					return false;
+				}
+				if (parseOption(key->second, {it + 1, it + 1 + key->second.nargs}))
+					return false;
+				it = it + 1 + key->second.nargs;
 
 			} else if (arg.front() == '-') { // Parse as shorts
 
@@ -55,20 +75,26 @@ namespace argsparse {
 					const auto key = std::find_if(_options.begin(), _options.end(),
 							[&c_it] (auto& opt) {	return (opt.second.short_opt == *c_it); });
 					if (key == _options.end()) {
-						std::cerr << "Parser::Parse: -" << *c_it << " not found." << std::endl;
+						std::cerr << "Parser::parse() -" << *c_it << " not found." << std::endl;
 						return false;
 					}
-					if (key->second.nargs && c_it != arg.end() - 1) {
-						std::cerr << "Parser::Parse: -" << *c_it << " requires "
-							<< key->second.nargs << " arguments." << std::endl;
-						return false;
+					if (c_it != arg.end() - 1) {
+						if (key->second.nargs) {
+							std::cerr << "Parser::parse() -" << *c_it << " requires "
+								<< key->second.nargs << " arguments." << std::endl;
+							return false;
+						}
+						key->second.count++;
+					} else {
+						if (parseOption(key->second, {it + 1, it + 1 + key->second.nargs}))
+							return false;
+						it = it + 1 + key->second.nargs;
 					}
-					if (!parseOption(key->second, ++it, args.end())) return false;
 				}
 
 			} else { // Parse as positional arg
 				if (pos_it == _positional.end()) {
-					std::cerr << "Parser::Parse: too many positional arguments!" << std::endl;
+					std::cerr << "Parser::parse() too many positional arguments!" << std::endl;
 					return false;
 				}
 				(*pos_it).second = *it;
@@ -104,8 +130,7 @@ namespace argsparse {
 	const Option& Parser::operator[](const char _short_opt)
 	{
 		const auto key = std::find_if(_options.begin(), _options.end(),
-				[&_short_opt] (const auto& opt) {
-				return (opt.second.short_opt == _short_opt); });
+				[&_short_opt] (const auto& opt) {	return (opt.second.short_opt == _short_opt); });
 		if (key == _options.end()) throw(
 				argsparse::exception("Parser::operator[]: " + std::string(&_short_opt) + " not found."));
 		return key->second;
