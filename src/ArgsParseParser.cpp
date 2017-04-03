@@ -52,10 +52,8 @@ namespace argsparse {
 
 				for (auto c_it = arg.begin() + 1; c_it != arg.end(); ++c_it) {
 
-					const std::map<std::string, Option>::iterator key = std::find_if(
-							_options.begin(), _options.end(), [&c_it]
-							(std::pair<std::string, Option>& opt)
-							{	return (opt.second.short_opt == *c_it); });
+					const auto key = std::find_if(_options.begin(), _options.end(),
+							[&c_it] (auto& opt) {	return (opt.second.short_opt == *c_it); });
 					if (key == _options.end()) {
 						std::cerr << "Parser::Parse: -" << *c_it << " not found." << std::endl;
 						return false;
@@ -105,10 +103,9 @@ namespace argsparse {
 
 	const Option& Parser::operator[](const char _short_opt)
 	{
-		const std::map<std::string, Option>::const_iterator key = std::find_if(
-				_options.begin(), _options.end(), [_short_opt]
-				(const std::pair<std::string, Option>& opt)
-				{	return (opt.second.short_opt == _short_opt); });
+		const auto key = std::find_if(_options.begin(), _options.end(),
+				[&_short_opt] (const auto& opt) {
+				return (opt.second.short_opt == _short_opt); });
 		if (key == _options.end()) throw(
 				argsparse::exception("Parser::operator[]: " + std::string(&_short_opt) + " not found."));
 		return key->second;
