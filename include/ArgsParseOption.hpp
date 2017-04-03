@@ -126,7 +126,7 @@ namespace argsparse {
 			count++;
 		}
 
-		bool operator()(const Option& opt) const { return (opt.count); }
+		operator bool() const { return count != 0; }
 
 		friend std::ostream& operator<<(std::ostream& os, const Option& opt);
 	};
