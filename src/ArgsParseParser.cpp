@@ -131,7 +131,7 @@ namespace argsparse {
 		os << "\n";
 		os << "Options:\n";
 		for (auto opt : p._options) {
-			os << "\t\t" << opt.second << "\n";
+			os << "\t" << opt.second << "\n";
 		}
 		return os;
 	}
