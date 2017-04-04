@@ -6,16 +6,18 @@ namespace argsparse {
 
 	bool parseOption(Option& opt, std::vector<std::string>::const_iterator& args, std::vector<std::string>::const_iterator end)
 	{
-		// Reduce count if past variable args
+		// Check if enough args
+		if (args + opt.nargs >= end) {
+			std::cerr << "Parser::parseOption() option " << opt.long_opt
+				<< " requires " << opt.nargs << " arguments." << std::endl;
+			return false;
+		}
+		// Parse upto max allowed args
 		while (opt.count++ < (opt.nargs + opt.vargs)) {
-			if (args == end || args->front() == '-') {
-				if (opt.count <= opt.nargs) {
-					std::cerr << "Parser::parseOption() option " << opt.long_opt
-						<< " requires " << opt.nargs << " arguments." << std::endl;
-					return false;
-				} else break;
-			}
+			if (args->front() == '-') break;
 			opt.parse(*args);
+			if (args + 1 == end) break; // Check if we can increment (we dont want to reach end)
+			args++;
 		}
 		return true;
 	}
@@ -40,7 +42,7 @@ namespace argsparse {
 		if (_name == "") _name = args.front();
 		auto pos_it = _positional.begin();
 
-		for (auto it = args.begin() + 1; it < args.end(); ++it) {
+		for (auto it = args.begin() + 1; it != args.end(); ++it) {
 			std::string arg = *it;
 
 			if (arg.substr(0, 2) == "--") { // Parse as long
