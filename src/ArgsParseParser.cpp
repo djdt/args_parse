@@ -29,7 +29,7 @@ namespace argsparse {
 		}
 
 		// Reduce count if past variable args
-		while (opt.count++ < opt.vargs) {
+		while (opt.count++ < (opt.nargs + opt.vargs)) {
 			if (args == end || args->front() == '-') break;
 			opt.parse(*(args++));
 		}

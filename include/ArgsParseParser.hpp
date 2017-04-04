@@ -29,10 +29,11 @@ namespace argsparse
 			}
 			template <typename T>
 				void addOption(const std::string& long_opt, const char short_opt = 0,
-						const std::string& desc = "", const T& default_val = 0, const int32_t required_args = 0)
+						const std::string& desc = "", const T& default_val = 0, const int32_t required_args = -1)
 				{
 					if (_options.find(long_opt) != _options.end()) throw(
 							argsparse::exception("Parser::AddOption: option already exists."));
+					if (required_args < 0) required_args = value::size(default_val);
 					_options.insert({long_opt, Option(long_opt, short_opt,
 								desc, default_val, required_args)});
 				}
