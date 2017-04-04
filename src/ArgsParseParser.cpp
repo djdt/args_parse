@@ -13,11 +13,10 @@ namespace argsparse {
 			return false;
 		}
 		// Parse upto max allowed args
-		while (opt.count++ < (opt.nargs + opt.vargs)) {
+		while (args + 1 != end && opt.count++ < (opt.nargs + opt.vargs)) {
+			args++;
 			if (args->front() == '-') break;
 			opt.parse(*args);
-			if (args + 1 == end) break; // Check if we can increment (we dont want to reach end)
-			args++;
 		}
 		return true;
 	}
@@ -53,7 +52,7 @@ namespace argsparse {
 					return false;
 				}
 
-				if (!parseOption(key->second, ++it, args.end()))
+				if (!parseOption(key->second, it, args.end()))
 					return false;
 
 			} else if (arg.front() == '-') { // Parse as shorts
@@ -75,7 +74,7 @@ namespace argsparse {
 						key->second.count++;
 					} else { // Parse the last short option
 
-						if (!parseOption(key->second, ++it, args.end()))
+						if (!parseOption(key->second, it, args.end()))
 							return false;
 					}
 				}
