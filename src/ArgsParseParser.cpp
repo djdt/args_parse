@@ -13,9 +13,10 @@ namespace argsparse {
 			return false;
 		}
 		// Parse upto max allowed args
-		while (args + 1 != end && opt.count++ < (opt.nargs + opt.vargs)) {
+		while (opt.count++ < (opt.nargs + opt.vargs)) {
+			if (args + 1 == end) break; // Can we increment
 			args++;
-			if (args->front() == '-') break;
+			if (args->front() == '-') break; // Is this an option
 			opt.parse(*args);
 		}
 		return true;
