@@ -25,17 +25,16 @@ namespace argsparse
 			{
 				if (_options.find(long_opt) != _options.end()) throw(
 						argsparse::exception("Parser::AddOption: option already exists."));
-				_options.insert({long_opt, Option(long_opt, short_opt,
-							desc, false, 0)});
+				_options.insert({long_opt, Option(long_opt, short_opt, desc)});
 			}
 			template <typename T>
 				void addOption(const std::string& long_opt, const char short_opt = 0,
-						const std::string& desc = "", const T& default_val = 0)
+						const std::string& desc = "", const T& default_val = 0, const int32_t required_args = 0)
 				{
 					if (_options.find(long_opt) != _options.end()) throw(
 							argsparse::exception("Parser::AddOption: option already exists."));
 					_options.insert({long_opt, Option(long_opt, short_opt,
-								desc, default_val, argsparse::value::size(default_val))});
+								desc, default_val, required_args)});
 				}
 			template<typename T>
 				const T& option(const std::string& name) {

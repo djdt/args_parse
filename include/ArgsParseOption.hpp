@@ -108,6 +108,11 @@ namespace argsparse {
 		int32_t vargs;
 		AnyValue value;
 
+		// Constructor for zero argument option
+		Option(const std::string& _long_opt, const char _short_opt, const std::string& _desc)
+			: count(0), long_opt(_long_opt), short_opt(_short_opt), desc(_desc), nargs(0), value(false) {
+				vargs = 0;
+			}
 		template<typename T>
 			Option(const std::string& _long_opt, const char _short_opt, const std::string& _desc,
 					const T& default_val, const int32_t _nargs)
