@@ -13,15 +13,17 @@ namespace argsparse {
 
 		os << "--" << opt.long_opt << " ";
 
-		if (opt.nargs) {
+		if (opt.vargs) {
+			if (opt.vargs > opt.nargs) os << "[";
 			std::string upper(opt.long_opt);
 			std::transform(upper.begin(), upper.end(), upper.begin(),
 					[] (char c) { return std::toupper(c); });
 			os << upper;
 		}
-		if (opt.nargs > 1) {
+		if (opt.vargs > 1) {
 			os << "...";
 		}
+		if (opt.vargs > opt.nargs) os << "]";
 		return os << " : " << opt.desc;
 	}
 

@@ -28,7 +28,6 @@ namespace argsparse
 				_options.insert({long_opt, Option(long_opt, short_opt,
 							desc, false, 0)});
 			}
-
 			template <typename T>
 				void addOption(const std::string& long_opt, const char short_opt = 0,
 						const std::string& desc = "", const T& default_val = 0)

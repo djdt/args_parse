@@ -4,17 +4,34 @@
 
 namespace argsparse {
 
-	bool parseOption(Option& opt, const std::vector<std::string>& args)
+	/* bool parseOption(Option& opt, const std::vector<std::string>& args) */
+	/* { */
+	/* 	auto it = args.cbegin() + 1; */
+	/* 	while(opt.count++ < opt.nargs) { */
+	/* 		if ((*it).front() == '-') { */
+	/* 			std::cerr << "Parser:parse() " << opt.long_opt << " requires " */
+	/* 				<< opt.nargs << " arguments." << std::endl; */
+	/* 			return false; */
+	/* 		} */
+	/* 		opt.parse(*it); */
+	/* 		++it; */
+	/* 	} */
+	/* 	return true; */
+	/* } */
+
+	bool parseOption(Option& opt, std::vector<std::string>::const_iterator& args, std::vector<std::string>::const_iterator end)
 	{
-		auto it = args.cbegin() + 1;
-		while(opt.count++ < opt.nargs) {
-			if ((*it).front() == '-') {
-				std::cerr << "Parser:parse() " << opt.long_opt << " requires "
-					<< opt.nargs << " arguments." << std::endl;
-				return false;
-			}
-			opt.parse(*it);
-			++it;
+		// Check if enough args
+		if (args + opt.nargs >= end) {
+			std::cerr << "Parser::parseOption() option " << opt.long_opt
+				<< " requires " << opt.nargs << " arguments." << std::endl;
+			return false;
+		}
+
+		// Reduce count if past variable args
+		while (opt.count++ < opt.vargs) {
+			if (args == end || args->front() == '-') break;
+			opt.parse(*(args++));
 		}
 		return true;
 	}
@@ -50,14 +67,16 @@ namespace argsparse {
 					return false;
 				}
 
-				if (it + key->second.nargs >= args.end()) {
-					std::cerr << "Parser:parse() " << arg << " requires "
-						<< key->second.nargs << " arguments." << std::endl;
-					return false;
-				}
-				std::vector<std::string> opt_args(it, it + 1 + key->second.nargs);
-				if (!parseOption(key->second, opt_args)) return false;
-				it = it + key->second.nargs;
+				/* if (it + key->second.nargs == args.end()) { */
+				/* 	std::cerr << "Parser:parse() " << arg << " requires " */
+				/* 		<< key->second.nargs << " arguments." << std::endl; */
+				/* 	return false; */
+				/* } */
+
+				if (!parseOption(key->second, it, args.end())) return false;
+				/* std::vector<std::string> opt_args(it, it + 1 + key->second.nargs); */
+				/* if (!parseOption(key->second, opt_args)) return false; */
+				/* it = it + key->second.nargs; */
 
 			} else if (arg.front() == '-') { // Parse as shorts
 
@@ -77,14 +96,14 @@ namespace argsparse {
 						}
 						key->second.count++;
 					} else { // Parse the last short option
-						if (it + key->second.nargs >= args.end()) {
-							std::cerr << "Parser:parse() " << arg << " requires "
-								<< key->second.nargs << " arguments." << std::endl;
-							return false;
-						}
-						std::vector<std::string> opt_args(it, it + 1 + key->second.nargs);
-						if (!parseOption(key->second, opt_args)) return false;
-						it = it + key->second.nargs;
+						/* if (it + key->second.nargs >= args.end()) { */
+						/* 	std::cerr << "Parser:parse() " << arg << " requires " */
+						/* 		<< key->second.nargs << " arguments." << std::endl; */
+						/* 	return false; */
+						/* } */
+						/* std::vector<std::string> opt_args(it, it + 1 + key->second.nargs); */
+						if (!parseOption(key->second, it, args.end())) return false;
+						/* it = it + key->second.nargs; */
 					}
 				}
 

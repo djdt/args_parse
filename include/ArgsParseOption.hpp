@@ -105,13 +105,14 @@ namespace argsparse {
 		const char short_opt;
 		const std::string desc;
 		int32_t nargs;
+		int32_t vargs;
 		AnyValue value;
 
 		template<typename T>
-			Option(const std::string& _long_opt, const char _short_opt, const std::string& _desc, const T& default_val, const int32_t _nargs)
+			Option(const std::string& _long_opt, const char _short_opt, const std::string& _desc,
+					const T& default_val, const int32_t _nargs)
 			: count(0), long_opt(_long_opt), short_opt(_short_opt), desc(_desc), nargs(_nargs), value(default_val) {
-				if (nargs > 0 && value::size(default_val) != nargs) throw(
-						argsparse::exception("Option(): " + long_opt + " default val differs from nargs."));
+				vargs = value::size(default_val) - nargs;
 			}
 
 		template<typename T>
