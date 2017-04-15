@@ -1,7 +1,6 @@
 #ifndef _ARGS_PARSE_OPTION_H_
 #define _ARGS_PARSE_OPTION_H_
 
-#include <algorithm>
 #include <sstream>
 #include <string>
 #include <typeinfo>

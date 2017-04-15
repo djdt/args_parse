@@ -7,26 +7,26 @@ namespace argsparse {
 
 	std::ostream& operator<<(std::ostream& os, const Option& opt)
 	{
-		// Print options
-		os << "--" << opt.name;
-		if (opt.short_opt) os << ",-" << opt.short_opt;
-
-		// Print the argument
+		// Set options
+		std::string opt_str("--" + opt.name);
+		if (opt.short_opt) opt_str.append(",-").push_back(opt.short_opt);
+		opt_str.append(" ");
+		// Set the argument(s)
 		if (opt.nargs || opt.vargs) {
-			if (!opt.nargs && opt.vargs) os << "["; // if optional
-			std::string upper(opt.name);
-			std::transform(upper.begin(), upper.end(), upper.begin(),
-					[] (char c) { return std::toupper(c); });
-			os << upper;
+			if (!opt.nargs && opt.vargs) opt_str.append("["); // if optional
+			opt_str.append(opt.name.substr(0, 12));
+			std::for_each(opt_str.end() - opt.name.size(), opt_str.end(),
+					[] (char& c) { c = std::toupper(c); });
 			if (opt.nargs + opt.vargs > 1) { // more than one arg
-				if (opt.nargs && opt.vargs) os << "["; // if mixed
-				os << "...";
+				if (opt.nargs && opt.vargs) opt_str.append("["); // if mixed
+				opt_str.append("...");
 			}
-			if (opt.vargs) os << "]"; // if optional
+			if (opt.vargs) opt_str.append("]"); // if optional
 		}
+		// Print option and arguments
+		os << std::left << std::setw(31) << opt_str;
 		// Print the description
-		os.fill(' ');
-		return os << std::setw(100) << " : " + opt.desc;
+		return os << " : " + opt.desc;
 	}
 
 } /* namespace argsparse */
