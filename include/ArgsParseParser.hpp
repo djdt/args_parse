@@ -13,12 +13,14 @@ namespace argsparse
 	class Parser
 	{
 		private:
-			std::string _name;
+			std::string _program_name;
+			std::string _additional_text;
 			std::map<std::string, Option> _options;
 			std::vector<std::pair<const std::string, std::string>> _positional;
 
 		public:
-			Parser(const std::string name = "") : _name(name) {}
+			Parser(const std::string program_name = "")
+				: _program_name(program_name), _additional_text("") {}
 
 			void addOption(const std::string& long_opt, const char short_opt = 0,
 					const std::string& desc = "")
@@ -43,6 +45,8 @@ namespace argsparse
 
 			void addPositional(const std::string& name);
 			const std::string& positional(const std::string& name);
+
+			void addText(const std::string& text) { _additional_text = text; }
 
 			bool parse(const std::vector<std::string>& args);
 			bool parse(int32_t argc, const char* argv[]);

@@ -39,7 +39,7 @@ namespace argsparse {
 
 	bool Parser::parse(const std::vector<std::string>& args)
 	{
-		if (_name == "") _name = args.front();
+		if (_program_name == "") _program_name = args.front();
 		auto pos_it = _positional.begin();
 
 		for (auto it = args.begin() + 1; it != args.end(); ++it) {
@@ -128,7 +128,7 @@ namespace argsparse {
 
 	std::ostream& operator<<(std::ostream& os, const Parser& p)
 	{
-		os << "Usage: " << p._name << " [options] ";
+		os << "Usage: " << p._program_name << " [options] ";
 		for (auto p : p._positional) {
 			os << p.first << " ";
 		}
@@ -137,7 +137,7 @@ namespace argsparse {
 		for (auto opt : p._options) {
 			os << "\t" << opt.second << "\n";
 		}
-		return os;
+		return os << p._additional_text;
 	}
 
 } /* namespace argsparse */
