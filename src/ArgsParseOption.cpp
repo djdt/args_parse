@@ -8,8 +8,8 @@ namespace argsparse {
 	std::ostream& operator<<(std::ostream& os, const Option& opt)
 	{
 		// Print options
-		if (opt.short_opt) os << "-" << opt.short_opt << ",";
-		os << "--" << opt.name << " ";
+		os << "--" << opt.name;
+		if (opt.short_opt) os << ",-" << opt.short_opt;
 
 		// Print the argument
 		if (opt.nargs || opt.vargs) {
@@ -24,7 +24,9 @@ namespace argsparse {
 			}
 			if (opt.vargs) os << "]"; // if optional
 		}
-		return os << " : " << opt.desc;
+		// Print the description
+		os.fill(' ');
+		return os << std::setw(100) << " : " + opt.desc;
 	}
 
 } /* namespace argsparse */
