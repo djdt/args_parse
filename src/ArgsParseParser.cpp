@@ -1,5 +1,6 @@
 #include "ArgsParseParser.hpp"
 
+#include <algorithm>
 #include <iostream>
 
 namespace argsparse {
