@@ -8,9 +8,7 @@ namespace argsparse {
 	std::ostream& operator<<(std::ostream& os, const Option& opt)
 	{
 		// Print options
-		if (opt.short_opt != 0) {
-			os << "-" << opt.short_opt << ",";
-		}
+		if (opt.short_opt) os << "-" << opt.short_opt << ",";
 		os << "--" << opt.name << " ";
 
 		// Print the argument
