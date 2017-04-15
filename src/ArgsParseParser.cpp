@@ -8,7 +8,7 @@ namespace argsparse {
 	{
 		// Check if enough args
 		if (args + opt.nargs >= end) {
-			std::cerr << "Parser::parseOption() option " << opt.long_opt
+			std::cerr << "Parser::parseOption() option " << opt.name
 				<< " requires " << opt.nargs << " arguments." << std::endl;
 			return false;
 		}

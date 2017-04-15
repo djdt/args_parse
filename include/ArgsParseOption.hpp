@@ -101,7 +101,7 @@ namespace argsparse {
 	struct Option
 	{
 		int32_t count;
-		std::string long_opt;
+		std::string name;
 		const char short_opt;
 		const std::string desc;
 		int32_t nargs;
@@ -110,13 +110,13 @@ namespace argsparse {
 
 		// Constructor for zero argument option
 		Option(const std::string& _long_opt, const char _short_opt, const std::string& _desc)
-			: count(0), long_opt(_long_opt), short_opt(_short_opt), desc(_desc), nargs(0), value(false) {
+			: count(0), name(_long_opt), short_opt(_short_opt), desc(_desc), nargs(0), value(false) {
 				vargs = 0;
 			}
 		template<typename T>
 			Option(const std::string& _long_opt, const char _short_opt, const std::string& _desc,
 					const T& default_val, const int32_t _nargs)
-			: count(0), long_opt(_long_opt), short_opt(_short_opt), desc(_desc), nargs(_nargs), value(default_val) {
+			: count(0), name(_long_opt), short_opt(_short_opt), desc(_desc), nargs(_nargs), value(default_val) {
 				vargs = value::size(default_val) - nargs;
 			}
 
