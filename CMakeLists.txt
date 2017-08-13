@@ -11,5 +11,4 @@ file(GLOB_RECURSE SRC_FILES ${${PROJECT_NAME}_SOURCE_DIR}/src/*.cpp)
 
 add_library(${PROJECT_NAME} ${SRC_FILES})
 
-target_link_libraries(${PROJECT_NAME}
-)
+target_link_libraries(${PROJECT_NAME})
